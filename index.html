@@ -47,37 +47,44 @@
     <a href="eaglercraft.html" class="btn">Eaglercraft Tuffclient</a>
 </body>
 
-
+<dialog id="proxyDialog" style="padding:20px; border-radius:8px; border:1px solid #ccc; text-align:center;">
+    <p style="margin-top:0;">How would you like to open this game?</p>
+    <button id="btnProxy">Launch Proxy</button>
+    <button id="btnNormal">Launch Normally</button>
+    <button id="btnCancel" style="display:block; margin:15px auto 0 auto; color:red;">Nevermind</button>
+</dialog>
 <script>
+    let activeUrl = '';
+    const dialog = document.getElementById('proxyDialog');
     document.querySelectorAll('.btn').forEach(link => {
         link.addEventListener('click', function(event) {
             event.preventDefault();
-            const fileUrl = this.getAttribute('href');
-            
-            // Ask the user: OK = True (Use Proxy), Cancel = False (Normal Tab)
-            const useProxy = confirm("Do you want to use an about:blank proxy?");
-
-            if (useProxy) {
-                // Your original about:blank proxy logic
-                const blankWindow = window.open('about:blank', '_blank');
-                if (blankWindow) {
-                    const doc = blankWindow.document;
-                    doc.body.style.margin = '0';
-                    doc.body.style.overflow = 'hidden';
-
-                    const iframe = doc.createElement('iframe');
-                    iframe.src = fileUrl;
-                    iframe.style.width = '100vw';
-                    iframe.style.height = '100vh';
-                    iframe.style.border = 'none';
-
-                    doc.body.appendChild(iframe);
-                }
-            } else {
-                // Launch the HTML file normally in a new tab
-                window.open(fileUrl, '_blank');
-            }
+            activeUrl = this.getAttribute('href');
+            dialog.showModal();
         });
     });
+    document.getElementById('btnProxy').addEventListener('click', () => {
+        dialog.close();
+        const blankWindow = window.open('about:blank', '_blank');
+        if (blankWindow) {
+            const doc = blankWindow.document;
+            doc.body.style.margin = '0';
+            doc.body.style.overflow = 'hidden';
+            const iframe = doc.createElement('iframe');
+            iframe.src = activeUrl;
+            iframe.style.width = '100vw';
+            iframe.style.height = '100vh';
+            iframe.style.border = 'none';
+            doc.body.appendChild(iframe);
+        }
+    });
+    document.getElementById('btnNormal').addEventListener('click', () => {
+        dialog.close();
+        window.open(activeUrl, '_blank');
+    });
+    document.getElementById('btnCancel').addEventListener('click', () => {
+        dialog.close();
+    });
 </script>
+
 </html>
