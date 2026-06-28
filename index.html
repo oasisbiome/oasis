@@ -4,21 +4,24 @@
 <style>
     .btn {
     padding: 12.5px 25px;
+    font-size: 16px;
     font-weight: 600;
-    background: rgba(255,255,255,.15);
+    background-color: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,.3);
-    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
     border-radius: 50px;
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
     }
-    .modern-btn:hover {
-    transform: scale(1.08); /* Makes the button 8% bigger */
+    .btn:hover {
+    transform: scale(1.08);
     background-color: rgba(255, 255, 255, 0.25);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
-    .modern-btn:active {
+    .btn:active {
     transform: scale(0.95);
     }
 
@@ -27,12 +30,12 @@
 
 <head>
     <title>My Apps</title>
-    <link rel="icon" type="image/jpeg" href="https://pbs.twimg.com/profile_images/1179529603624226818/oGF_v7IC.jpg">
+    <link rel="icon" type="image/jpeg" href="https://twimg.com">
 </head>
 
 
 <body>
-    <a href="https://www.google.com" class="btn">Google</a>
+    <a href="https://wikipedia.org" class="btn">Wikipedia</a>
 </body>
 
 
@@ -49,7 +52,7 @@
                 doc.body.style.overflow = 'hidden';
 
                 const iframe = doc.createElement('iframe');
-                iframe.src = window.location.origin + '/' + fileUrl;
+                iframe.src = fileUrl;
                 iframe.style.width = '100vw';
                 iframe.style.height = '100vh';
                 iframe.style.border = 'none';
