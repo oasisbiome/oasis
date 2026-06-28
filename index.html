@@ -57,6 +57,14 @@
 
             if (blankWindow) {
                 const doc = blankWindow.document;
+                
+                // Add title and favicon to the new window
+                doc.title = "My Apps";
+                const favicon = doc.createElement('link');
+                favicon.rel = 'icon';
+                favicon.href = 'https://pbs.twimg.com/profile_images/1179529603624226818/oGF_v7IC.jpg';
+                doc.head.appendChild(favicon);
+
                 doc.body.style.margin = '0';
                 doc.body.style.overflow = 'hidden';
 
@@ -71,4 +79,5 @@
         });
     });
 </script>
+
 </html>
