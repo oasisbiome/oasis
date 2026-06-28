@@ -49,32 +49,69 @@
 
 
 <script>
+    // 1. Injected styles required for the modal layout
+    const styles = `
+        .app-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #fff;
+            z-index: 99999;
+            display: none;
+        }
+        .app-overlay iframe {
+            width: 100%; height: 100%;
+            border: none;
+        }
+    `;
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = styles;
+    document.head.appendChild(styleSheet);
+
+    // 2. Main execution logic
     document.querySelectorAll('.btn').forEach(link => {
         link.addEventListener('click', function(event) {
             event.preventDefault();
             const fileUrl = this.getAttribute('href');
 
-            const htmlContent = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>My Apps</title>
-                    <link rel="icon" type="image/jpeg" href="https://twimg.com">
-                    <style>
-                        body { margin: 0; overflow: hidden; }
-                        iframe { width: 100vw; height: 100vh; border: none; }
-                    </style>
-                </head>
-                <body>
-                    <iframe src="${fileUrl}"></iframe>
-                </body>
-                </html>
-            `;
+            // Cache original tab properties to restore them later if needed
+            const originalTitle = document.title;
+            const originalFavicon = document.querySelector("link[rel~='icon']")?.href;
 
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const blobUrl = URL.createObjectURL(blob);
+            // Dynamically alter the main browser tab elements
+            document.title = "My Apps";
+            let favicon = document.querySelector("link[rel~='icon']");
+            if (!favicon) {
+                favicon = document.createElement('link');
+                favicon.rel = 'icon';
+                document.head.appendChild(favicon);
+            }
+            favicon.href = 'https://twimg.com';
 
-            window.open(blobUrl, '_blank');
+            // Create or query the fullscreen container view
+            let overlay = document.querySelector('.app-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'app-overlay';
+                
+                const iframe = document.createElement('iframe');
+                overlay.appendChild(iframe);
+                document.body.appendChild(overlay);
+            }
+
+            // Load target link inside the iframe viewport
+            overlay.querySelector('iframe').src = fileUrl;
+            overlay.style.display = 'block';
+
+            // Handle the back / browser history navigation state naturally
+            window.history.pushState({ overlayOpen: true }, "");
+
+            window.addEventListener('popstate', function() {
+                overlay.style.display = 'none';
+                overlay.querySelector('iframe').src = 'about:blank';
+                document.title = originalTitle;
+                if (favicon && originalFavicon) favicon.href = originalFavicon;
+            }, { once: true });
         });
     });
 </script>
