@@ -74,37 +74,61 @@
     <button id="btnCancel" style="display:block; margin:15px auto 0 auto; color:red;">Nevermind</button>
 </dialog>
 <script>
-    let activeUrl = '';
-    const dialog = document.getElementById('proxyDialog');
-    document.querySelectorAll('.btn').forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            activeUrl = this.getAttribute('href');
-            dialog.showModal();
-        });
+let activeUrl = '';
+const dialog = document.getElementById('proxyDialog');
+
+document.querySelectorAll('.btn').forEach(link => {
+    link.addEventListener('click', function(event) {
+        event.preventDefault();
+        activeUrl = this.getAttribute('href');
+        dialog.showModal();
     });
-    document.getElementById('btnProxy').addEventListener('click', () => {
-        dialog.close();
-        const blankWindow = window.open('about:blank', '_blank');
-        if (blankWindow) {
-            const doc = blankWindow.document;
-            doc.body.style.margin = '0';
-            doc.body.style.overflow = 'hidden';
-            const iframe = doc.createElement('iframe');
-            iframe.src = activeUrl;
-            iframe.style.width = '100vw';
-            iframe.style.height = '100vh';
-            iframe.style.border = 'none';
-            doc.body.appendChild(iframe);
-        }
-    });
-    document.getElementById('btnNormal').addEventListener('click', () => {
-        dialog.close();
-        window.open(activeUrl, '_blank');
-    });
-    document.getElementById('btnCancel').addEventListener('click', () => {
-        dialog.close();
-    });
+});
+
+// Helper function to handle full-screen iframe tab creation
+function createIframeTab(url, titleText, faviconUrl) {
+    const blankWindow = window.open('about:blank', '_blank');
+    if (blankWindow) {
+        const doc = blankWindow.document;
+        
+        // Set custom title
+        doc.title = titleText;
+        
+        // Set custom favicon
+        const link = doc.createElement('link');
+        link.rel = 'icon';
+        link.href = faviconUrl;
+        doc.head.appendChild(link);
+        
+        // Setup full screen styling
+        doc.body.style.margin = '0';
+        doc.body.style.overflow = 'hidden';
+        
+        // Create and append the iframe
+        const iframe = doc.createElement('iframe');
+        iframe.src = url;
+        iframe.style.width = '100vw';
+        iframe.style.height = '100vh';
+        iframe.style.border = 'none';
+        doc.body.appendChild(iframe);
+    }
+}
+
+document.getElementById('btnProxy').addEventListener('click', () => {
+    dialog.close();
+    // Keeps your existing custom proxy function or logic here
+    createIframeTab(activeUrl, "My Apps", "https://twimg.com");
+});
+
+document.getElementById('btnNormal').addEventListener('click', () => {
+    dialog.close();
+    // Opens normally inside an iframe wrapper to force the custom Title and Favicon
+    createIframeTab(activeUrl, "My Apps", "https://twimg.com");
+});
+
+document.getElementById('btnCancel').addEventListener('click', () => {
+    dialog.close();
+});
 </script>
 
 </html>
