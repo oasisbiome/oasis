@@ -97,7 +97,7 @@ function createIframeTab(url, titleText, faviconUrl) {
         // Set custom favicon
         const link = doc.createElement('link');
         link.rel = 'icon';
-        link.href = pbs.twimg.com/profile_images/1179529603624226818/oGF_v7IC.jpg;
+        link.href = faviconURL;
         doc.head.appendChild(link);
         
         // Setup full screen styling
@@ -117,13 +117,13 @@ function createIframeTab(url, titleText, faviconUrl) {
 document.getElementById('btnProxy').addEventListener('click', () => {
     dialog.close();
     // Keeps your existing custom proxy function or logic here
-    createIframeTab(activeUrl, "My Apps", "https://twimg.com");
+    createIframeTab(activeUrl, "My Apps", "hhttps://pbs.twimg.com/profile_images/1179529603624226818/oGF_v7IC.jpg");
 });
 
 document.getElementById('btnNormal').addEventListener('click', () => {
     dialog.close();
     // Opens normally inside an iframe wrapper to force the custom Title and Favicon
-    createIframeTab(activeUrl, "My Apps", "https://twimg.com");
+    createIframeTab(activeUrl, "My Apps", "https://pbs.twimg.com/profile_images/1179529603624226818/oGF_v7IC.jpg");
 });
 
 document.getElementById('btnCancel').addEventListener('click', () => {
